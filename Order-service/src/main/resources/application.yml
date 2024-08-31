@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: Order-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/postgres-order
+    username: nour
+    password: nour
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+        spring.json.type.mapping:
+          orderConfirmation: com.noux.orderservice.event.OrderConfirmation
+
+application:
+  config:
+    payment-service-url: http://localhost:8030/api/v1/payment
+    product-service-url: http://localhost:8070/api/v1/product
+    client-service-url: http://localhost:8060/api/v1/client
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    com.netflix.eureka: DEBUG
+
+server:
+  port: 8040
+
+api:
+  version: "/api/v1"
